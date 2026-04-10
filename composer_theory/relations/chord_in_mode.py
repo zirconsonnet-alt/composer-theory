@@ -10,8 +10,8 @@ from ..domain.mode import Mode
 from ..domain.ids import ChordId, RootVariantScaleRef, SubVScaleRef
 from ..domain.transition import Transition
 from ..tools import is_subv_scale_ref, scale_ref_root_degree, scale_ref_variant
-from .hit import ResolveHit, format_degrees
-from .tools import score_functions_from_intervals
+from .hit import ResolveHit, _format_degrees
+from .tools import _score_functions_from_intervals
 
 
 _ANALYSIS_MISSING = object()
@@ -71,7 +71,7 @@ class ChordInModeHit(ResolveHit):
     def __str__(self) -> str:
         if self.chord_id is None:
             return f"[Chord∈Mode] chord={self.chord} -> non-member analysis in mode={self.mode}"
-        degrees = format_degrees(frozenset(self.chord_id.composition or []))
+        degrees = _format_degrees(frozenset(self.chord_id.composition or []))
         if is_subv_scale_ref(self.chord_id.scale_ref):
             return (
                 f"[Chord∈Mode] chord={self.chord} -> subV(target={self.chord_id.scale_ref.target_degree.name}), "
@@ -92,7 +92,7 @@ class ChordInModeHit(ResolveHit):
             object.__setattr__(
                 self,
                 "_function_scores",
-                score_functions_from_intervals(present=intervals, tonic_iv=tonic_iv, third_iv=third_iv),
+                _score_functions_from_intervals(present=intervals, tonic_iv=tonic_iv, third_iv=third_iv),
             )
 
     def _ensure_chromatic_score(self) -> None:

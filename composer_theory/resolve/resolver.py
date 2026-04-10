@@ -8,7 +8,8 @@ from ..domain.ids import ChordId, ModeId, RootVariantScaleRef, SubVScaleRef
 from ..relations.chord_in_key import ChordInKeyHit
 from ..relations.chord_in_mode import ChordInModeHit
 from ..relations.mode_in_key import ModeInKeyHit
-AnyResolveHit = Union[
+
+_AnyResolveHit = Union[
     ChordInModeHit,
     ModeInKeyHit,
     ChordInKeyHit,
@@ -16,8 +17,8 @@ AnyResolveHit = Union[
 
 
 class Resolver:
-    def resolve(self, a, b) -> List[AnyResolveHit]:
-        hits: List[AnyResolveHit] = []
+    def resolve(self, a, b) -> List[_AnyResolveHit]:
+        hits: List[_AnyResolveHit] = []
         swapped = self._should_swap(a, b)
         if swapped:
             a, b = b, a
@@ -32,15 +33,15 @@ class Resolver:
             return hits
         return hits
 
-    def _resolve_chord_in_mode(self, chord: Chord, mode: Mode) -> List[AnyResolveHit]:
+    def _resolve_chord_in_mode(self, chord: Chord, mode: Mode) -> List[_AnyResolveHit]:
         hits = self._resolve_chord_in_mode_exact(chord=chord, mode=mode)
         if hits:
             return hits
         return [ChordInModeHit(mode=mode, chord_id=None, chord=chord)]
 
     @staticmethod
-    def _resolve_mode_in_key(mode: Mode, key: Key) -> List[AnyResolveHit]:
-        hits: List[AnyResolveHit] = []
+    def _resolve_mode_in_key(mode: Mode, key: Key) -> List[_AnyResolveHit]:
+        hits: List[_AnyResolveHit] = []
         for mt in Modes:
             if key[mt] == mode:
                 hits.append(ModeInKeyHit(key=key, mode_id=ModeId(role=mt, access=ModeAccess.Substitute)))
@@ -51,8 +52,8 @@ class Resolver:
             return hits
         return [ModeInKeyHit(key=key, mode_id=None, mode=mode)]
 
-    def _resolve_chord_in_key(self, chord: Chord, key: Key) -> List[AnyResolveHit]:
-        hits: List[AnyResolveHit] = []
+    def _resolve_chord_in_key(self, chord: Chord, key: Key) -> List[_AnyResolveHit]:
+        hits: List[_AnyResolveHit] = []
 
         def extend(mode: Mode, mode_id: ModeId) -> None:
             mode_in_key_hit = ModeInKeyHit(key=key, mode_id=mode_id)
@@ -101,7 +102,7 @@ class Resolver:
         return tuple(mode.spec.variants.keys())
 
     def _resolve_chord_in_mode_exact(self, chord: Chord, mode: Mode) -> List[ChordInModeHit]:
-        hits: List[AnyResolveHit] = []
+        hits: List[_AnyResolveHit] = []
         seen: set[ChordId] = set()
         variants = self._mode_variants(mode)
         refs = [RootVariantScaleRef(root_degree=degree, variant=variant) for variant in variants for degree in Degrees]

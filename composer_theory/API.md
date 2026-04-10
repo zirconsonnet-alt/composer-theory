@@ -118,7 +118,6 @@
   - `degree`：目标级位。
   - `variant`：可选的 `VariantForm`。
 - 公开方法：无新增公开方法。
-- 相关别名：`TargetPoint = DegreeVariant`。
 
 ### `TurningPoints`
 

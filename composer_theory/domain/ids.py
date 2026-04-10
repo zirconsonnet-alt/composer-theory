@@ -3,6 +3,14 @@ from typing import FrozenSet, Union
 from .enums.core import Degrees, NoteNames
 from .enums.harmony import ModeAccess, Modes, VariantForm
 
+__all__ = [
+    "KeyId",
+    "ModeId",
+    "RootVariantScaleRef",
+    "SubVScaleRef",
+    "ChordId",
+]
+
 
 @dataclass(frozen=True, slots=True)
 class KeyId:

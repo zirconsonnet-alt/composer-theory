@@ -817,7 +817,7 @@ M = (name, variants, c)
 - Aeolian
 - Locrian
 
-这些调式的基础形态都在 `MODE_SPECS` 中预先写定。  
+这些调式的基础形态都在内部规格表中预先写定。  
 因此，调式实例化时不是重新发明音阶，而是调用既有规格。
 
 <a id="section-3-3"></a>
@@ -1236,7 +1236,6 @@ assert same_as_type == c_dorian
 
 - `relations/__init__.py`
 - `relations/hit.py`
-- `relations/tools.py`
 - `relations/chord_in_mode.py`
 - `relations/mode_in_key.py`
 - `relations/chord_in_key.py`
@@ -1897,10 +1896,10 @@ assert hit.chord_id.scale_ref == RootVariantScaleRef(Degrees.V, VariantForm.Base
 `Resolver` 的公开入口是：
 
 ```python
-resolve(a, b) -> List[AnyResolveHit]
+resolve(a, b) -> List[ChordInModeHit | ModeInKeyHit | ChordInKeyHit]
 ```
 
-其中 `AnyResolveHit` 是以下三类命中的并集：
+其中返回值元素只可能是以下三类命中对象之一：
 
 - `ChordInModeHit`
 - `ModeInKeyHit`

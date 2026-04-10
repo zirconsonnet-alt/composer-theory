@@ -4,6 +4,8 @@ from ._lookup import LookupEnum
 from .core import Degrees
 from .harmony import VariantForm
 
+__all__ = ["DynamicType", "DegreeVariant", "TurningPoints", "States", "Voices", "LeadingType"]
+
 
 class DynamicType(LookupEnum):
     Strong = "strong"
@@ -14,10 +16,6 @@ class DynamicType(LookupEnum):
 class DegreeVariant:
     degree: Degrees
     variant: Optional[VariantForm] = None
-
-
-TargetPoint = DegreeVariant
-
 
 class TurningPoints(LookupEnum):
     Descending_VI = DegreeVariant(Degrees.VI, VariantForm.Descending)

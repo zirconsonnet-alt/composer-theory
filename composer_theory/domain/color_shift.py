@@ -3,24 +3,24 @@ from .enums.core import Intervals
 from ._intern import InternedMeta, FrozenSlotsMixin
 
 
-IntervalProfile = Tuple[Intervals, ...]
+_IntervalProfile = Tuple[Intervals, ...]
 
 
 class ColorShift(FrozenSlotsMixin, metaclass=InternedMeta):
     __slots__ = ("src", "diff", "dst", "__weakref__")
 
     @classmethod
-    def _cache_key(cls, src: IntervalProfile, diff: Intervals, dst: IntervalProfile):
+    def _cache_key(cls, src: _IntervalProfile, diff: Intervals, dst: _IntervalProfile):
         return src, diff, dst
 
-    def __init__(self, src: IntervalProfile, diff: Intervals, dst: IntervalProfile):
+    def __init__(self, src: _IntervalProfile, diff: Intervals, dst: _IntervalProfile):
         self._validate_profile(src, "src")
         self._validate_profile(dst, "dst")
         if not isinstance(diff, Intervals):
             raise TypeError("ColorShift.diff 必须为 Intervals")
-        self.src: IntervalProfile = src
+        self.src: _IntervalProfile = src
         self.diff: Intervals = diff
-        self.dst: IntervalProfile = dst
+        self.dst: _IntervalProfile = dst
         self._freeze()
 
     @staticmethod

@@ -1,18 +1,21 @@
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Dict, Tuple, Mapping
-from .enums.harmony import Modes, VariantForm
+from typing import Dict, Mapping, Tuple
+
 from .enums.core import Degrees, Intervals
+from .enums.harmony import Modes, VariantForm
+
+__all__ = ["ModeSpec"]
 
 
-IntervalProfile = Tuple[Intervals, ...]
+_IntervalProfile = Tuple[Intervals, ...]
 
 
 @dataclass(frozen=True, slots=True)
 class ModeSpec:
     mode: Modes
-    variants: Mapping[VariantForm, IntervalProfile]
-    subv_profile: IntervalProfile | None
+    variants: Mapping[VariantForm, _IntervalProfile]
+    subv_profile: _IntervalProfile | None
     characteristic_degree: Degrees
 
     @property
@@ -20,7 +23,7 @@ class ModeSpec:
         return self.subv_profile is not None
 
 
-def patch_profile(base: IntervalProfile, changes: Mapping[Degrees, Intervals]) -> IntervalProfile:
+def _patch_profile(base: _IntervalProfile, changes: Mapping[Degrees, Intervals]) -> _IntervalProfile:
     lst = list(base)
     for deg, itv in changes.items():
         idx = deg.value - 1
@@ -28,20 +31,20 @@ def patch_profile(base: IntervalProfile, changes: Mapping[Degrees, Intervals]) -
     return tuple(lst)
 
 
-def make_spec(
+def _make_spec(
     mode: Modes,
-    base: IntervalProfile,
+    base: _IntervalProfile,
     characteristic_degree: Degrees,
     *,
     ascending_changes: Mapping[Degrees, Intervals] | None = None,
     descending_changes: Mapping[Degrees, Intervals] | None = None,
-    subv_profile: IntervalProfile | None = None,
+    subv_profile: _IntervalProfile | None = None,
 ) -> ModeSpec:
-    variants: Dict[VariantForm, IntervalProfile] = {VariantForm.Base: base}
+    variants: Dict[VariantForm, _IntervalProfile] = {VariantForm.Base: base}
     if ascending_changes:
-        variants[VariantForm.Ascending] = patch_profile(base, ascending_changes)
+        variants[VariantForm.Ascending] = _patch_profile(base, ascending_changes)
     if descending_changes:
-        variants[VariantForm.Descending] = patch_profile(base, descending_changes)
+        variants[VariantForm.Descending] = _patch_profile(base, descending_changes)
     return ModeSpec(
         mode=mode,
         variants=MappingProxyType(dict(variants)),
@@ -50,15 +53,15 @@ def make_spec(
     )
 
 
-MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
-    Modes.Ionian: make_spec(
+_MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
+    Modes.Ionian: _make_spec(
         mode=Modes.Ionian,
         base=(Intervals.P1, Intervals.M2, Intervals.M3, Intervals.P4, Intervals.P5, Intervals.M6, Intervals.M7),
         characteristic_degree=Degrees.VII,
         subv_profile=(Intervals.P1, Intervals.M2, Intervals.M3, Intervals.P4, Intervals.P5, Intervals.M6, Intervals.m7)
     ),
 
-    Modes.Dorian: make_spec(
+    Modes.Dorian: _make_spec(
         mode=Modes.Dorian,
         base=(Intervals.P1, Intervals.M2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.M6, Intervals.m7),
         characteristic_degree=Degrees.VI,
@@ -66,7 +69,7 @@ MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
         descending_changes={Degrees.VI: Intervals.m6},
         subv_profile=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7)
     ),
-    Modes.Phrygian: make_spec(
+    Modes.Phrygian: _make_spec(
         mode=Modes.Phrygian,
         base=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7),
         characteristic_degree=Degrees.II,
@@ -77,19 +80,19 @@ MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
         },
         subv_profile=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7)
     ),
-    Modes.Lydian: make_spec(
+    Modes.Lydian: _make_spec(
         mode=Modes.Lydian,
         base=(Intervals.P1, Intervals.M2, Intervals.M3, Intervals.A4, Intervals.P5, Intervals.M6, Intervals.M7),
         characteristic_degree=Degrees.IV,
     ),
-    Modes.Mixolydian: make_spec(
+    Modes.Mixolydian: _make_spec(
         mode=Modes.Mixolydian,
         base=(Intervals.P1, Intervals.M2, Intervals.M3, Intervals.P4, Intervals.P5, Intervals.M6, Intervals.m7),
         characteristic_degree=Degrees.VII,
         ascending_changes={Degrees.VII: Intervals.M7},
         subv_profile=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7)
     ),
-    Modes.Aeolian: make_spec(
+    Modes.Aeolian: _make_spec(
         mode=Modes.Aeolian,
         base=(Intervals.P1, Intervals.M2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7),
         characteristic_degree=Degrees.IV,
@@ -99,7 +102,7 @@ MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
         },
         subv_profile=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.P5, Intervals.m6, Intervals.m7)
     ),
-    Modes.Locrian: make_spec(
+    Modes.Locrian: _make_spec(
         mode=Modes.Locrian,
         base=(Intervals.P1, Intervals.m2, Intervals.m3, Intervals.P4, Intervals.d5, Intervals.m6, Intervals.m7),
         characteristic_degree=Degrees.V,
@@ -108,7 +111,7 @@ MODE_SPECS: Mapping[Modes, ModeSpec] = MappingProxyType({
 })
 
 
-def degree_mode(parent: Modes, degree: Degrees) -> Modes:
+def _degree_mode(parent: Modes, degree: Degrees) -> Modes:
     if not isinstance(parent, Modes):
         raise TypeError("parent 必须是 Modes")
     if not isinstance(degree, Degrees):

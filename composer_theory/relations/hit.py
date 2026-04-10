@@ -1,14 +1,15 @@
 from abc import ABC
 from typing import Iterable, Union
+
 from ..domain.enums.core import Degrees
 from ..domain.enums.harmony import Modes
 
 
-def format_degrees(degs: Iterable[Degrees]) -> str:
+def _format_degrees(degs: Iterable[Degrees]) -> str:
     return "{" + ", ".join(d.name for d in sorted(degs, key=lambda d: d.value)) + "}"
 
 
-def format_role(role: Union[Modes, Degrees]) -> str:
+def _format_role(role: Union[Modes, Degrees]) -> str:
     return getattr(role, "name", str(role))
 
 

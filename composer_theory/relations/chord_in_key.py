@@ -14,7 +14,7 @@ from ..tools import (
     scale_ref_root_degree,
     scale_ref_variant,
 )
-from .hit import ResolveHit, format_degrees, format_role
+from .hit import ResolveHit, _format_degrees, _format_role
 from .mode_in_key import ModeInKeyHit
 
 
@@ -61,11 +61,11 @@ class ChordInKeyHit(ResolveHit):
     def __str__(self) -> str:
         if self.chord_id is None:
             return f"[Chord∈Key] chord={self.chord} -> direct analysis in key={self.mode_in_key_hit.key}"
-        degrees = format_degrees(frozenset(self.chord_id.composition or []))
+        degrees = _format_degrees(frozenset(self.chord_id.composition or []))
         if is_subv_scale_ref(self.chord_id.scale_ref):
             return (
                 f"[Chord∈Key] chord={self.chord} -> mode={self.mode_in_key_hit.mode} "
-                f"(access={self.mode_in_key_hit.mode_id.access.name}, role={format_role(self.mode_in_key_hit.mode_id.role)}) "
+                f"(access={self.mode_in_key_hit.mode_id.access.name}, role={_format_role(self.mode_in_key_hit.mode_id.role)}) "
                 f"in key={self.mode_in_key_hit.key}; "
                 f"subV(target={self.chord_id.scale_ref.target_degree.name}), degrees={degrees}"
             )
@@ -73,7 +73,7 @@ class ChordInKeyHit(ResolveHit):
         root = scale_ref_root_degree(self.chord_id.scale_ref)
         return (
             f"[Chord∈Key] chord={self.chord} -> mode={self.mode_in_key_hit.mode}[{variant.name if variant is not None else 'Base'}] "
-            f"(access={self.mode_in_key_hit.mode_id.access.name}, role={format_role(self.mode_in_key_hit.mode_id.role)}) "
+            f"(access={self.mode_in_key_hit.mode_id.access.name}, role={_format_role(self.mode_in_key_hit.mode_id.role)}) "
             f"in key={self.mode_in_key_hit.key}; "
             f"root={root.name}, degrees={degrees}"
         )

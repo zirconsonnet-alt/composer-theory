@@ -1,12 +1,15 @@
 import itertools
 from typing import List, Set, Tuple
+
 from ..domain.base_note import BaseNote
-from ..domain.key import Key
-from ..domain.mode import Mode
 from ..domain.color_shift import ColorShift
-from ..domain.ids import RootVariantScaleRef, SubVScaleRef
 from ..domain.enums.core import Degrees, NoteNames
 from ..domain.enums.harmony import Modes, ModeAccess, VariantForm
+from ..domain.ids import RootVariantScaleRef, SubVScaleRef
+from ..domain.key import Key
+from ..domain.mode import Mode
+
+__all__ = ["get_all_color_shifts"]
 
 _BASE_SCALE_REF = RootVariantScaleRef(Degrees.I, VariantForm.Base)
 
@@ -23,7 +26,7 @@ def _access_modes(key: Key) -> List[Tuple[ModeAccess, Degrees | Modes, Mode]]:
     return rel + sub
 
 
-def build_color_shifts() -> Set[ColorShift]:
+def _build_color_shifts() -> Set[ColorShift]:
     shifts: Set[ColorShift] = set()
     key = Key(BaseNote(NoteNames.C), Modes.Ionian)
     modes = _access_modes(key)
@@ -53,5 +56,5 @@ _ALL_COLOR_SHIFTS: Set[ColorShift] | None = None
 def get_all_color_shifts() -> Set[ColorShift]:
     global _ALL_COLOR_SHIFTS
     if _ALL_COLOR_SHIFTS is None:
-        _ALL_COLOR_SHIFTS = build_color_shifts()
+        _ALL_COLOR_SHIFTS = _build_color_shifts()
     return _ALL_COLOR_SHIFTS

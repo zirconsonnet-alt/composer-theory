@@ -4,13 +4,13 @@ from .chord import Chord
 from .scale import Scale
 from .ids import ModeId, RootVariantScaleRef
 from .base_note import BaseNote
-from .mode_specs import degree_mode
+from .mode_specs import _degree_mode
 from .enums.core import Degrees, Intervals
 from .enums.harmony import VariantForm, Modes, ModeAccess
 from ._intern import InternedMeta, FrozenSlotsMixin
 
 
-ModeIndex = Tuple[Degrees, ModeAccess]
+_ModeIndex = Tuple[Degrees, ModeAccess]
 
 
 class Key(FrozenSlotsMixin, metaclass=InternedMeta):
@@ -41,11 +41,11 @@ class Key(FrozenSlotsMixin, metaclass=InternedMeta):
     @overload
     def __getitem__(self, key: Degrees) -> Mode: ...
     @overload
-    def __getitem__(self, key: ModeIndex) -> Mode: ...
+    def __getitem__(self, key: _ModeIndex) -> Mode: ...
     @overload
     def __getitem__(self, key: ModeId) -> Mode: ...
 
-    def __getitem__(self, key: Union[Modes, Degrees, ModeIndex, ModeId]) -> Mode:
+    def __getitem__(self, key: Union[Modes, Degrees, _ModeIndex, ModeId]) -> Mode:
         if isinstance(key, ModeId):
             role = key.role
             access = key.access
@@ -60,7 +60,7 @@ class Key(FrozenSlotsMixin, metaclass=InternedMeta):
             main_mode = Mode(self.tonic, self.main_mode_type)
             main_scale = main_mode[RootVariantScaleRef(Degrees.I, VariantForm.Base)]
             derived_tonic = main_scale[key]
-            derived_mode_type = degree_mode(self.main_mode_type, key)
+            derived_mode_type = _degree_mode(self.main_mode_type, key)
             return Mode(derived_tonic, derived_mode_type)
         if isinstance(key, tuple) and len(key) == 2:
             degree, access = key

@@ -1,7 +1,9 @@
 from ._lookup import LookupEnum
 
+__all__ = ["Degrees", "NoteNames", "Intervals"]
 
-ORDER = ("C", "D", "E", "F", "G", "A", "B")
+
+_ORDER = ("C", "D", "E", "F", "G", "A", "B")
 
 
 class Degrees(LookupEnum):
@@ -36,18 +38,18 @@ class NoteNames(LookupEnum):
     B = 11
 
     def __sub__(self, other: Degrees) -> "NoteNames":
-        self_degree = Degrees(ORDER.index(self.name) + 1)
+        self_degree = Degrees(_ORDER.index(self.name) + 1)
         other_degree = self_degree - other
-        return NoteNames[ORDER[other_degree.value - 1]]
+        return NoteNames[_ORDER[other_degree.value - 1]]
 
     def __add__(self, other: Degrees) -> "NoteNames":
-        self_degree = Degrees(ORDER.index(self.name) + 1)
+        self_degree = Degrees(_ORDER.index(self.name) + 1)
         other_degree = self_degree + other
-        return NoteNames[ORDER[other_degree.value - 1]]
+        return NoteNames[_ORDER[other_degree.value - 1]]
 
     def __or__(self, other: "NoteNames") -> Degrees:
-        self_degree = Degrees(ORDER.index(self.name) + 1)
-        other_degree = Degrees(ORDER.index(other.name) + 1)
+        self_degree = Degrees(_ORDER.index(self.name) + 1)
+        other_degree = Degrees(_ORDER.index(other.name) + 1)
         return self_degree - other_degree
 
 

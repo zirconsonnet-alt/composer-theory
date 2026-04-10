@@ -4,11 +4,11 @@ from .enums.core import Degrees, Intervals
 from .dissonance import (
     DissonanceRelation,
     Resolution,
-    SET_RULES,
-    EDGE_RULE_BY_DELTA,
-    interval_rank,
-    order_by_responsibility,
-    iter_triads,
+    _SET_RULES,
+    _EDGE_RULE_BY_DELTA,
+    _interval_rank,
+    _order_by_responsibility,
+    _iter_triads,
 )
 from ._intern import InternedMeta, FrozenSlotsMixin
 
@@ -102,14 +102,14 @@ class Quality(FrozenSlotsMixin, metaclass=InternedMeta):
         present = frozenset((self.base.value - self.omits) | self.tensions)
         notes = frozenset({Intervals.P1, *present})
         rel_map: Dict[FrozenSet[Intervals], DissonanceRelation] = {}
-        note_list = sorted(notes, key=lambda x: (interval_rank(x), x.semitones))
+        note_list = sorted(notes, key=lambda x: (_interval_rank(x), x.semitones))
         for i in range(len(note_list)):
             for j in range(i + 1, len(note_list)):
                 a = note_list[i]
                 b = note_list[j]
-                earlier, later = order_by_responsibility(a, b)
+                earlier, later = _order_by_responsibility(a, b)
                 delta = (later.semitones - earlier.semitones) % 12
-                rule = EDGE_RULE_BY_DELTA.get(delta)
+                rule = _EDGE_RULE_BY_DELTA.get(delta)
                 if rule is None:
                     continue
                 key = frozenset({earlier, later})
@@ -122,9 +122,9 @@ class Quality(FrozenSlotsMixin, metaclass=InternedMeta):
                     min_moves=rule.min_moves,
                     resolution=((earlier, rule.earlier_resolution), (later, rule.later_resolution)),
                 )
-        for a, b, c in iter_triads(note_list):
+        for a, b, c in _iter_triads(note_list):
             semi_set = frozenset({a.semitones, b.semitones, c.semitones})
-            for rule in SET_RULES:
+            for rule in _SET_RULES:
                 if not rule.match(semi_set):
                     continue
                 key = frozenset({a, b, c})
@@ -137,7 +137,7 @@ class Quality(FrozenSlotsMixin, metaclass=InternedMeta):
                     min_moves=rule.min_moves,
                     resolution=tuple(
                         (iv, rule.resolution_for_member(iv))
-                        for iv in sorted(key, key=lambda x: (interval_rank(x), x.semitones))
+                        for iv in sorted(key, key=lambda x: (_interval_rank(x), x.semitones))
                     ),
                 )
         return list(rel_map.values())

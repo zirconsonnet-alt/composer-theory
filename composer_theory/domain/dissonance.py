@@ -1,7 +1,15 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Callable, Dict, FrozenSet, Iterable, Tuple
+
 from .enums.core import Degrees, Intervals
+
+__all__ = [
+    "Resolution",
+    "DissonanceRelation",
+    "EdgeRule",
+    "SetRule",
+]
 
 
 class Resolution(Enum):
@@ -49,7 +57,7 @@ class SetRule:
     resolution_for_member: Callable[[Intervals], Resolution]
 
 
-TERTIAN_STACK_ORDER: Tuple[Degrees, ...] = (
+_TERTIAN_STACK_ORDER: Tuple[Degrees, ...] = (
     Degrees.I,
     Degrees.III,
     Degrees.V,
@@ -59,22 +67,22 @@ TERTIAN_STACK_ORDER: Tuple[Degrees, ...] = (
     Degrees.VI,
 )
 
-_DEGREE_RANK: Dict[Degrees, int] = {deg: i for i, deg in enumerate(TERTIAN_STACK_ORDER)}
+_DEGREE_RANK: Dict[Degrees, int] = {deg: i for i, deg in enumerate(_TERTIAN_STACK_ORDER)}
 
 
-def degree_rank(deg: Degrees) -> int:
+def _degree_rank(deg: Degrees) -> int:
     return _DEGREE_RANK.get(deg, 999)
 
 
-def interval_rank(iv: Intervals) -> int:
-    return degree_rank(iv.degree)
+def _interval_rank(iv: Intervals) -> int:
+    return _degree_rank(iv.degree)
 
 
-def order_by_responsibility(a: Intervals, b: Intervals) -> tuple[Intervals, Intervals]:
+def _order_by_responsibility(a: Intervals, b: Intervals) -> tuple[Intervals, Intervals]:
     """
     返回 (earlier, later)，其中 later 默认承担“解决责任”。
     """
-    ra, rb = interval_rank(a), interval_rank(b)
+    ra, rb = _interval_rank(a), _interval_rank(b)
     if ra < rb:
         return a, b
     if rb < ra:
@@ -82,7 +90,7 @@ def order_by_responsibility(a: Intervals, b: Intervals) -> tuple[Intervals, Inte
     return (a, b) if a.semitones <= b.semitones else (b, a)
 
 
-def is_aug_triad_pitchclass_set(semi_set: FrozenSet[int]) -> bool:
+def _is_aug_triad_pitchclass_set(semi_set: FrozenSet[int]) -> bool:
     if len(semi_set) != 3:
         return False
     mn = min(semi_set)
@@ -94,7 +102,7 @@ def _always_step_either(_: Intervals) -> Resolution:
     return Resolution.STEP_EITHER
 
 
-EDGE_RULES: Tuple[EdgeRule, ...] = (
+_EDGE_RULES: Tuple[EdgeRule, ...] = (
     EdgeRule(
         delta_semitones=1,
         kind="m2",
@@ -139,21 +147,21 @@ EDGE_RULES: Tuple[EdgeRule, ...] = (
     ),
 )
 
-EDGE_RULE_BY_DELTA: Dict[int, EdgeRule] = {r.delta_semitones: r for r in EDGE_RULES}
+_EDGE_RULE_BY_DELTA: Dict[int, EdgeRule] = {r.delta_semitones: r for r in _EDGE_RULES}
 
 
-SET_RULES: Tuple[SetRule, ...] = (
+_SET_RULES: Tuple[SetRule, ...] = (
     SetRule(
         kind="aug_set",
         priority=90,
         min_moves=1,
-        match=is_aug_triad_pitchclass_set,
+        match=_is_aug_triad_pitchclass_set,
         resolution_for_member=_always_step_either,
     ),
 )
 
 
-def iter_triads(items: Iterable[Intervals]) -> Iterable[Tuple[Intervals, Intervals, Intervals]]:
+def _iter_triads(items: Iterable[Intervals]) -> Iterable[Tuple[Intervals, Intervals, Intervals]]:
     lst = list(items)
     for i in range(len(lst)):
         for j in range(i + 1, len(lst)):

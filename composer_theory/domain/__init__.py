@@ -6,3 +6,17 @@ from .base_note import BaseNote
 from .transition import Transition
 from .ids import ChordId, KeyId, ModeId, RootVariantScaleRef, SubVScaleRef
 
+__all__ = [
+    "Key",
+    "Mode",
+    "Scale",
+    "Chord",
+    "BaseNote",
+    "Transition",
+    "ChordId",
+    "KeyId",
+    "ModeId",
+    "RootVariantScaleRef",
+    "SubVScaleRef",
+]
+

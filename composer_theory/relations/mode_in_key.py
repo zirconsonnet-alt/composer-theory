@@ -9,8 +9,8 @@ from ..domain.mode import Mode
 from ..domain.ids import ChordId, ModeId, RootVariantScaleRef
 from ..domain.transition import Transition
 from ..tools import effective_role_degree
-from .hit import ResolveHit, format_role
-from .tools import score_functions_from_intervals
+from .hit import ResolveHit, _format_role
+from .tools import _score_functions_from_intervals
 
 
 _ANALYSIS_MISSING = object()
@@ -66,7 +66,7 @@ class ModeInKeyHit(ResolveHit):
             return f"[Mode∈Key] mode={self.mode} -> direct analysis in key={self.key}"
         return (
             f"[Mode∈Key] mode={self.mode} -> access={self.mode_id.access.name}, "
-            f"role={format_role(self.mode_id.role)} in key={self.key}"
+            f"role={_format_role(self.mode_id.role)} in key={self.key}"
         )
 
     def _ensure_function_scores(self) -> None:
@@ -78,7 +78,7 @@ class ModeInKeyHit(ResolveHit):
             object.__setattr__(
                 self,
                 "_function_scores",
-                score_functions_from_intervals(
+                _score_functions_from_intervals(
                     present=self._skeleton_intervals_in_key_main_base(),
                     tonic_iv=tonic_iv,
                     third_iv=third_iv,

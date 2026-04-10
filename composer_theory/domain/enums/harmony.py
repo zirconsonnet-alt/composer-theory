@@ -2,6 +2,16 @@ from enum import auto
 from .core import Intervals
 from ._lookup import LookupEnum
 
+__all__ = [
+    "Qualities",
+    "Modes",
+    "VariantForm",
+    "Tonality",
+    "ChromaticType",
+    "Functions",
+    "ModeAccess",
+]
+
 
 class Qualities(LookupEnum):
     maj = frozenset({Intervals.M3, Intervals.P5})

@@ -5,7 +5,7 @@ from .scale import Scale
 from .chord import Chord
 from .ids import ChordId, RootVariantScaleRef, ScaleRef, SubVScaleRef
 from .enums.core import Degrees, Intervals
-from .mode_specs import MODE_SPECS, ModeSpec
+from .mode_specs import ModeSpec, _MODE_SPECS
 from .enums.harmony import Modes, VariantForm, Tonality
 from ._intern import InternedMeta, FrozenSlotsMixin
 
@@ -18,7 +18,7 @@ class Mode(FrozenSlotsMixin, metaclass=InternedMeta):
         return tonic, mode_type
 
     def __init__(self, tonic: BaseNote, mode_type: Modes):
-        if (spec := MODE_SPECS.get(mode_type)) is None:
+        if (spec := _MODE_SPECS.get(mode_type)) is None:
             raise ValueError(f"未知 mode_type: {mode_type}")
         self.tonic = tonic
         self.mode_type = mode_type

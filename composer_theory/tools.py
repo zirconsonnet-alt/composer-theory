@@ -3,6 +3,18 @@ from .domain.enums.core import Degrees
 from .domain.enums.harmony import Modes, ModeAccess, VariantForm
 from .domain.ids import ModeId, RootVariantScaleRef, ScaleRef, SubVScaleRef
 
+__all__ = [
+    "effective_role_degree",
+    "map_degree_to_target_root",
+    "map_target_root_to_degree",
+    "is_root_variant_scale_ref",
+    "is_subv_scale_ref",
+    "scale_ref_kind",
+    "scale_ref_root_degree",
+    "scale_ref_variant",
+    "scale_ref_target_degree",
+]
+
 
 def effective_role_degree(mode: Union[ModeId, Modes, Degrees]) -> Degrees:
     if isinstance(mode, ModeId):
