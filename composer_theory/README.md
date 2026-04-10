@@ -67,8 +67,8 @@ PyPI 页面只会直接渲染本 README，不会单独渲染 `API.md`。
 
 - `ResolveHit`: 无额外命名公开方法
 - `ModeInKeyHit`: `is_member`, `access`, `role`, `function_scores`, `chromatic_score`, `color`
-- `ChordInModeHit`: `is_member`, `function_scores`, `chromatic_score`, `color`, `turning_points`, `composition`, `is_subv`
-- `ChordInKeyHit`: `is_member`, `function_scores`, `chromatic_score`, `color`, `composition`, `is_subv`
+- `ChordInModeHit`: `is_member`, `function_scores`, `chromatic_score`, `color`, `turning_points`
+- `ChordInKeyHit`: `is_member`, `function_scores`, `chromatic_score`, `color`
 - `Resolver`: `resolve`
 
 ### `composer_theory.implement`
@@ -1426,6 +1426,12 @@ Chord ∈ Mode
 因此，`chord_id` 不是“和弦名字”，  
 而是调式内部的一种定位坐标。
 
+成员命中的和弦组成与是否为 `SubV`，也应当直接从 `chord_id` 读取。  
+也就是说，只有当 `hit.is_member is True` 时，才应继续读取：
+
+- `hit.chord_id.composition`
+- `hit.chord_id.is_subv`
+
 <a id="section-6-5"></a>
 ### 6.5 功能分数
 
@@ -1481,7 +1487,7 @@ Functions -> float
 <a id="section-6-8"></a>
 ### 6.8 转折点
 
-`hit.turning_points()` 返回一个集合。  
+`hit.turning_points` 返回一个集合。  
 它只在以下条件下可能非空：
 
 1. 当前命中是成员命中；
@@ -1529,7 +1535,7 @@ hit = Resolver().resolve(chord, mode)[0]
 assert isinstance(hit, ChordInModeHit)
 assert hit.is_member is True
 assert hit.chord_id.scale_ref == RootVariantScaleRef(Degrees.V, VariantForm.Base)
-assert hit.turning_points() == set()
+assert hit.turning_points == set()
 ```
 
 ---
@@ -1771,6 +1777,14 @@ Chord ∈ Mode ∈ Key
 - `hit.mode_in_key_hit.mode_id`
 
 因此，`ChordInKeyHit` 不再把这些上下文信息额外摊平成自身属性。
+
+若需要读取成员命中的和弦身份细节，也应当显式通过 `chord_id` 进入。  
+也就是说，只有当 `hit.is_member is True` 时，才应继续读取：
+
+例如，应当读取：
+
+- `hit.chord_id.composition`
+- `hit.chord_id.is_subv`
 
 <a id="section-8-6"></a>
 ### 8.6 功能分数

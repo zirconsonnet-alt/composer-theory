@@ -206,8 +206,7 @@
 - 公开属性：
   - `scale_ref`：`RootVariantScaleRef | SubVScaleRef`。
   - `composition`：相对根音的级位组成。
-- 公开方法：
-  - `is_subv -> bool`：判断该和弦是否来自 SubV 音阶引用。
+  - `is_subv`：判断该和弦是否来自 SubV 音阶引用。
 
 ---
 
@@ -506,10 +505,12 @@
   - `function_scores`：和弦相对于调式主音的功能分数。
   - `chromatic_score`：和弦相对于调式基准音阶的半音化分数。
   - `color`：`(Transition, ColorShift)`，表示该和弦相对于调式主和弦的色彩差。
-  - `composition`：成员命中时返回和弦组成；非成员命中会抛出 `AttributeError`。
-  - `is_subv`：当前命中是否来自 SubV 音阶。
-- 公开方法：
-  - `turning_points() -> set[TurningPoints]`：返回当前和弦在上行 / 下行变体中的转折点集合。
+  - `turning_points`：返回当前和弦在上行 / 下行变体中的转折点集合。
+- 公开方法：无额外命名方法。
+- 读取成员身份：
+  - 仅当 `hit.is_member` 为 `True` 时，才应继续读取 `hit.chord_id`。
+  - `hit.chord_id.composition`：读取成员命中的和弦组成。
+  - `hit.chord_id.is_subv`：判断成员命中是否来自 SubV 音阶。
 
 ---
 
@@ -528,9 +529,11 @@
   - `function_scores`：和弦相对于主调式基准的功能分数。
   - `chromatic_score`：和弦相对于主调式基准的半音化分数。
   - `color`：`(Transition, ColorShift)`，表示该和弦相对于主和弦的色彩差。
-  - `composition`：成员命中时返回和弦组成；直接分析命中会抛出 `AttributeError`。
-  - `is_subv`：当前命中是否来自 SubV 音阶。
 - 公开方法：无额外命名方法。
+- 读取成员身份：
+  - 仅当 `hit.is_member` 为 `True` 时，才应继续读取 `hit.chord_id`。
+  - `hit.chord_id.composition`：读取成员命中的和弦组成。
+  - `hit.chord_id.is_subv`：判断成员命中是否来自 SubV 音阶。
 
 ---
 

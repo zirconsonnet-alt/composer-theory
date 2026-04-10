@@ -84,8 +84,10 @@ class RelationAnalysisTests(unittest.TestCase):
         self.assertEqual(len(chord_hits), 1)
         hit = chord_hits[0]
         self.assertTrue(hit.is_member)
-        self.assertTrue(hit.is_subv)
-        self.assertEqual(hit.turning_points(), set())
+        self.assertTrue(hit.chord_id.is_subv)
+        self.assertFalse(hasattr(hit, "is_subv"))
+        self.assertFalse(hasattr(hit, "composition"))
+        self.assertEqual(hit.turning_points, set())
 
 
 if __name__ == "__main__":

@@ -78,15 +78,3 @@ pip install composer-theory
 - `Arrangement`
 
 完整签名、公开属性、公开方法，以及 `[]` / `|` / `+` / `-` 等协议说明见 [composer_theory/API.md](./composer_theory/API.md)。
-
-## 仓库结构
-
-```text
-composer/
-├─ composer_theory/          # 包源码、主文档、API 文档
-├─ pyproject.toml            # 打包配置
-├─ MANIFEST.in               # 分发清单
-└─ LICENSE
-```
-
-根目录用于打包和发布；PyPI 长描述来自 [composer_theory/README.md](./composer_theory/README.md)。

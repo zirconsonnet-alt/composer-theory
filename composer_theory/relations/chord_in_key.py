@@ -123,16 +123,6 @@ class ChordInKeyHit(ResolveHit):
             for degree in self.chord_id.composition
         }
 
-    @property
-    def composition(self):
-        if self.chord_id is None:
-            raise AttributeError("direct analysis 没有 composition")
-        return self.chord_id.composition
-
-    @property
-    def is_subv(self) -> bool:
-        return self.chord_id is not None and is_subv_scale_ref(self.chord_id.scale_ref)
-
     def _intervals_in_key_main_base(self) -> FrozenSet[Intervals]:
         main_mode = self.mode_in_key_hit.key[self.mode_in_key_hit.key.main_mode_type]
         tonic = main_mode.tonic

@@ -54,6 +54,7 @@ class ChordInModeHit(ResolveHit):
         self._ensure_color()
         return cast(Tuple[Transition, ColorShift], self._color)
 
+    @property
     def turning_points(self) -> Set[TurningPoints]:
         if self.chord_id is None or is_subv_scale_ref(self.chord_id.scale_ref):
             return set()
@@ -138,16 +139,6 @@ class ChordInModeHit(ResolveHit):
             return self._matched_degrees_in_mode_base()
         root = scale_ref_root_degree(self.chord_id.scale_ref)
         return {root + d for d in self.chord_id.composition}
-
-    @property
-    def composition(self):
-        if self.chord_id is None:
-            raise AttributeError("non-member hit 没有 composition")
-        return self.chord_id.composition
-
-    @property
-    def is_subv(self) -> bool:
-        return self.chord_id is not None and is_subv_scale_ref(self.chord_id.scale_ref)
 
     def _degree_interval_in_mode_base(self, degree: Degrees) -> Intervals:
         base = self.mode[_BASE_SCALE_REF]
