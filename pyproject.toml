@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "composer-theory"
+dynamic = ["version"]
+description = "Standalone music theory primitives and harmonic relation analysis tools."
+readme = { file = "composer_theory/README.md", content-type = "text/markdown" }
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["music-theory", "composition", "harmony", "chords", "scales"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "build>=1.2",
+    "pytest>=9",
+    "twine>=6",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "composer_theory.__version__" }
+
+[tool.setuptools]
+include-package-data = false
+license-files = []
+
+[tool.setuptools.package-data]
+composer_theory = ["README.md", "API.md"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["composer_theory*"]
+exclude = ["composer_theory.tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["composer_theory/tests"]

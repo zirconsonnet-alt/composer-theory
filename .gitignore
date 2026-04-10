@@ -1,0 +1,17 @@
+# Python caches and local tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Build outputs
+build/
+dist/
+*.egg-info/
+
+# Local history and editor artifacts
+composer_theory/.history/
+.DS_Store
+Thumbs.db
+
+# Exclude sibling project from the composer-theory repository
+composer_create/
