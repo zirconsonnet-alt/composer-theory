@@ -33,6 +33,11 @@ dev = [
     "twine>=6",
 ]
 
+[project.urls]
+Documentation = "https://github.com/zirconsonnet-alt/composer-theory/blob/main/composer_theory/API.md"
+Repository = "https://github.com/zirconsonnet-alt/composer-theory"
+Issues = "https://github.com/zirconsonnet-alt/composer-theory/issues"
+
 [tool.setuptools.dynamic]
 version = { attr = "composer_theory.__version__" }
 
